@@ -9,8 +9,10 @@ package go.micro.srv.consignment;
 service ShippingService {
 
   // 需要实现的方法
+  // 创建货运记录
   rpc CreateConsignment(Consignment) returns (Response) {}
 
+  // 得到所有货运记录
   rpc GetConsignments(GetRequest) returns (Response) {}
 }
 
