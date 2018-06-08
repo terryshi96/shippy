@@ -5,13 +5,15 @@ package main
 import (
 	// 使用go-micro替代
 	micro "github.com/micro/go-micro"
-	//"log"
+	"log"
 	//"net"
 	//"google.golang.org/grpc"
 	//"google.golang.org/grpc/reflection"
 	// 引入生成的consignment.pb.go文件
-	pb "./proto/consignment"
-	"golang.org/x/net/context"
+	//pb "./proto/consignment"
+	pb "consignment-service/proto/consignment"
+	vesselProto "../vessel-service/proto/vessel"
+	"context"
 	"fmt"
 
 )
@@ -45,6 +47,8 @@ func (repo *Repository) GetAll() []*pb.Consignment {
 // 可以去对应的*.pb.go文件里查看需要实现的方法及其定义
 type service struct {
 	repo IRepository
+	// 请注意，我们在这里记录了一个货船服务的客户端对象，这里出现了一个微服务的方法调用了另一个微服务的方法
+	vesselClient vesselProto.VesselServiceClient
 }
 // CreateConsignment - 在proto中，我们只给这个微服务定一个了一个方法
 // 就是这个CreateConsignment方法，它接受一个context以及proto中定义的
@@ -54,6 +58,20 @@ type service struct {
 // 原始的 gRPC 代码有四种不同的方法申明，对应四种不同的 gRPC 数据传输手段。
 // 而 go-micro 统一了四种接口，抽象出了 req 和 res。
 func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, res *pb.Response) error {
+	// 这里，我们通过货船服务的客户端对象，向货船服务发出了一个请求
+	vesselResponse, err := s.vesselClient.FindAvailable(context.Background(), &vesselProto.Specification{
+		MaxWeight: req.Weight,
+		Capacity: int32(len(req.Containers)),
+	})
+	log.Printf("Found vessel: %s \n", vesselResponse.Vessel.Name)
+	if err != nil {
+		return err
+	}
+
+	// 维护关联关系
+	req.VesselId = vesselResponse.Vessel.Id
+
+	// 存在可用的货船才能创建货运订单
 	consignment, err := s.repo.Create(req)
 	if err != nil {
 		return err
@@ -81,9 +99,12 @@ func main() {
 		micro.Name("go.micro.srv.consignment"),
 		micro.Version("latest"),
 	)
+
+	// 我们在这里使用预置的方法生成了一个货船服务的客户端对象
+	vesselClient := vesselProto.NewVesselServiceClient("go.micro.srv.vessel", srv.Client())
 	// Init方法会解析命令行flags
 	srv.Init()
-	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo})
+	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo, vesselClient})
 	if err := srv.Run(); err != nil {
 		fmt.Println(err)
 	}

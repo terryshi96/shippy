@@ -7,7 +7,7 @@ import (
 	"golang.org/x/net/context"
 	"encoding/json"
 	"io/ioutil"
-	pb "microservice/consignment-service/proto/consignment"
+	pb "../consignment-service/proto/consignment"
 	"github.com/micro/go-micro/cmd"
 	microclient "github.com/micro/go-micro/client"
 	//"grpc_demo/app/client"
