@@ -1,0 +1,42 @@
+// consignment-service/proto/consignment/consignment.proto
+// consignments (货运微服务)
+// 语法版本
+syntax = "proto3";
+package go.micro.srv.consignment;
+
+// 定义service。一个service定义了此服务暴露给外界的交互界面。
+// service则是由protobuf的grpc插件处理。这个grpc插件使我们定义的service能使用message
+service ShippingService {
+
+  // 需要实现的方法
+  // 创建货运记录
+  rpc CreateConsignment(Consignment) returns (Response) {}
+
+  // 得到所有货运记录
+  rpc GetConsignments(GetRequest) returns (Response) {}
+}
+
+// 定义message以及使用数字占位。宽泛的讲，message就是你的数据结构，由protobuf处理
+message Consignment {
+  string id = 1;
+  string description = 2;
+  int32 weight = 3;
+  repeated Container containers = 4;
+  string vessel_id = 5;
+}
+message Container {
+  string id = 1;
+  string customer_id = 2;
+  string origin = 3;
+  string user_id = 4;
+}
+
+// Created a blank get request
+message GetRequest {}
+
+message Response {
+  bool created = 1;
+  Consignment consignment = 2;
+  // Added a pluralised consignment to our generic response message
+  repeated Consignment consignments = 3;
+}
