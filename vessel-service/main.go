@@ -4,7 +4,8 @@ package main
 import (
 	"errors"
 	"fmt"
-	pb "github.com/terryshi96/shippy/vessel-service/proto/vessel"
+	//与本地路径一致 dockerfile中workdir也要与此一致
+	pb "shippy/vessel-service/proto/vessel"
 	"github.com/micro/go-micro"
 	"context"
 )

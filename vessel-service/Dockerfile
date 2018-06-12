@@ -4,7 +4,7 @@ FROM golang:1.9.0 as builder
 # 使用host proxy进行翻墙
 ENV http_proxy 172.16.80.79:1087
 ENV https_proxy 172.16.80.79:1087
-WORKDIR /go/src/vessel-service
+WORKDIR /go/src/shippy/vessel-service
 RUN go get -u github.com/golang/dep/cmd/dep
 COPY . .
 RUN dep init && dep ensure
@@ -13,5 +13,5 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 RUN mkdir /app
 WORKDIR /app
-COPY --from=builder /go/src/vessel-service .
+COPY --from=builder /go/src/shippy/vessel-service/main .
 CMD ["./main"]
