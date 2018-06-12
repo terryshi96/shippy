@@ -4,7 +4,7 @@ package main
 import (
 	"errors"
 	"fmt"
-	pb "./proto/vessel"
+	pb "github.com/terryshi96/shippy/vessel-service/proto/vessel"
 	"github.com/micro/go-micro"
 	"context"
 )
