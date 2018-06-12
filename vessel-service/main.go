@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	//与本地路径一致 dockerfile中workdir也要与此一致
-	pb "shippy/vessel-service/proto/vessel"
+	pb "github.com/terryshi96/shippy/vessel-service/proto"
 	"github.com/micro/go-micro"
 	"context"
 )

@@ -11,8 +11,8 @@ import (
 	//"google.golang.org/grpc/reflection"
 	// 引入生成的consignment.pb.go文件
 	//pb "./proto/consignment"
-	pb "consignment-service/proto/consignment"
-	vesselProto "../vessel-service/proto/vessel"
+	pb "github.com/terryshi96/shippy/consignment-service/proto"
+	vesselProto "github.com/terryshi96/shippy/vessel-service/proto"
 	"context"
 	"fmt"
 
