@@ -8,7 +8,7 @@ package go.micro.srv.consignment;
 // service则是由protobuf的grpc插件处理。这个grpc插件使我们定义的service能使用message
 service ShippingService {
 
-  // 需要实现的方法
+  // 需要实现的方法, 可以理解为方法声明
   // 创建货运记录
   rpc CreateConsignment(Consignment) returns (Response) {}
 

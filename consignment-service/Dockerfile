@@ -23,7 +23,7 @@ RUN dep init && dep ensure
 
 # 编译我们的二进制文件
 # RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo .
-RUN CGO_ENABLED=0 GOOS=linux go build  -o consignment-service -a -installsuffix cgo main.go repository.go handler.go datastore.go
+RUN CGO_ENABLED=0 GOOS=linux go build  -o consignment-service -a -installsuffix cgo .
 
 # 在这里，我们第二次使用了FROM，它告诉Docker，我们从这里
 # 要开始第二个构建流程
